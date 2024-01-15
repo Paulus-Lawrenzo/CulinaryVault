@@ -9,15 +9,20 @@
         android:id="@+id/homeFragment"
         android:name="com.fazztrack.culinaryvault.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home"
+        />
+
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.fazztrack.culinaryvault.FavoritesFragment"
         android:label="fragment_favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites"
+        />
+
     <fragment
         android:id="@+id/categoriesFragment"
         android:name="com.fazztrack.culinaryvault.CategoriesFragment"
         android:label="fragment_categories"
-        tools:layout="@layout/fragment_categories" />
+        tools:layout="@layout/fragment_categories"
+        />
 </navigation>
