@@ -1,9 +1,10 @@
-package com.fazztrack.culinaryvault
+package com.fazztrack.culinaryvault.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
+import com.fazztrack.culinaryvault.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
