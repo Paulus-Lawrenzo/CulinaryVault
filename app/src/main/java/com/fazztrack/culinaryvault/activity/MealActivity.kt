@@ -1,0 +1,102 @@
+package com.fazztrack.culinaryvault.activity
+
+import android.content.Intent
+import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.View
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.fazztrack.culinaryvault.R
+import com.fazztrack.culinaryvault.databinding.ActivityMealBinding
+import com.fazztrack.culinaryvault.fragment.HomeFragment
+import com.fazztrack.culinaryvault.pojo.Meal
+import com.fazztrack.culinaryvault.viewmodel.HomeViewModel
+import com.fazztrack.culinaryvault.viewmodel.MealVideoModel
+
+class MealActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMealBinding
+    private lateinit var mealId: String
+    private lateinit var mealName: String
+    private lateinit var mealThumb: String
+    private lateinit var mealViewModel: MealVideoModel
+    private lateinit var youtubeLink: String
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMealBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        mealViewModel = ViewModelProvider(this)[MealVideoModel::class.java]
+
+        getMealInfoFromIntent()
+        setInformationInViews()
+
+        loadingCase()
+
+        mealViewModel.getMealDetail(mealId)
+        observerMealDetailsLiveData()
+
+        onYoutubeImageClick()
+    }
+
+    private fun onYoutubeImageClick() {
+        binding.ivYoutube.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(youtubeLink))
+            startActivity(intent)
+        }
+    }
+
+    private fun observerMealDetailsLiveData() {
+        mealViewModel.observerMealDeatilsLiveData().observe(this, object : Observer<Meal>{
+            override fun onChanged(value: Meal) {
+                onResponseCase()
+
+                val meal = value
+
+                binding.tvCategoryOnDetail.text = "Category : ${meal!!.strCategory}"
+                binding.tvAreaOnDetail.text = "Area : ${meal.strArea}"
+                binding.tvInstructionsStep.text = meal.strInstructions
+                youtubeLink = meal.strYoutube
+            }
+        })
+    }
+
+    private fun setInformationInViews() {
+        Glide
+            .with(applicationContext)
+            .load(mealThumb)
+            .into(binding.ivMealDetail)
+
+        binding.ctlCollapsing.title = mealName
+        binding.ctlCollapsing.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white))
+        binding.ctlCollapsing.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white))
+    }
+
+    private fun getMealInfoFromIntent() {
+        val intent = intent
+        mealId = intent.getStringExtra(HomeFragment.MEAL_ID)!!
+        mealName = intent.getStringExtra(HomeFragment.MEAL_NAME)!!
+        mealThumb = intent.getStringExtra(HomeFragment.MEAL_THUMB)!!
+    }
+
+    private fun loadingCase() {
+        binding.lpiProgressBar.visibility = View.VISIBLE
+        binding.btnFabAddFavorite.visibility = View.INVISIBLE
+        binding.tvCategoryOnDetail.visibility = View.INVISIBLE
+        binding.tvAreaOnDetail.visibility = View.INVISIBLE
+        binding.tvInstructions.visibility = View.INVISIBLE
+        binding.ivYoutube.visibility = View.INVISIBLE
+    }
+
+    private fun onResponseCase() {
+        binding.lpiProgressBar.visibility = View.INVISIBLE
+        binding.btnFabAddFavorite.visibility = View.VISIBLE
+        binding.tvCategoryOnDetail.visibility = View.VISIBLE
+        binding.tvAreaOnDetail.visibility = View.VISIBLE
+        binding.tvInstructions.visibility = View.VISIBLE
+        binding.ivYoutube.visibility = View.VISIBLE
+    }
+}
