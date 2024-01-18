@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -49,6 +50,7 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
+
     // Navigation Component
 //    val nav_version = "2.3.5"     // This is nav dependencies for change the image random meal (IT WORKS IF click home button or move to other fragment then back again)
     val nav_version = "2.7.6"       // This is nav dependencies for change the image (IT WORKS JUST move to other fragment then back again)
@@ -75,4 +77,10 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
     implementation ("android.arch.lifecycle:extensions:1.1.0")
+
+    // Room
+    val room_version = "2.4.1"
+    implementation  ("androidx.room:room-runtime:$room_version")
+    annotationProcessor ("androidx.room:room-compiler:$room_version")
+    implementation ("androidx.room:room-ktx:$room_version")
 }
