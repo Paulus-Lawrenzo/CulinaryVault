@@ -1,6 +1,7 @@
 package com.fazztrack.culinaryvault.retrofit
 
 import com.fazztrack.culinaryvault.pojo.CategoryList
+import com.fazztrack.culinaryvault.pojo.MealsByCategoryList
 import com.fazztrack.culinaryvault.pojo.MealList
 import retrofit2.Call
 import retrofit2.http.GET
@@ -14,5 +15,8 @@ interface MealApi {
     fun getMealDetails(@Query("i") id: String): Call<MealList>
 
     @GET("filter.php?")
-    fun getPopularFoods(@Query("c") categoryName: String): Call<CategoryList>
+    fun getPopularFoods(@Query("c") categoryName: String): Call<MealsByCategoryList>
+
+    @GET("categories.php")
+    fun getCategories(): Call<CategoryList>
 }

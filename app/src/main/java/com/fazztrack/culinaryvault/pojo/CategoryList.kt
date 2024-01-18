@@ -1,5 +1,5 @@
 package com.fazztrack.culinaryvault.pojo
 
 data class CategoryList(
-    val meals: List<CategoryMeals>
+    val categories: List<Category>
 )
