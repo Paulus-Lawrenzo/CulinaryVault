@@ -10,6 +10,7 @@ import com.fazztrack.culinaryvault.pojo.CategoryList
 
 class CategoriesAdapter(): RecyclerView.Adapter<CategoriesAdapter.CategoryViewHolder>() {
     private var categoriesList = ArrayList<Category>()
+    var onMealsClick : ((Category) -> Unit)? = null
 
     fun setCategoryList(categoriesList: List<Category>) {
         this.categoriesList = categoriesList as ArrayList<Category>
@@ -37,6 +38,10 @@ class CategoriesAdapter(): RecyclerView.Adapter<CategoriesAdapter.CategoryViewHo
             .into(holder.binding.ivCategory)
 
         holder.binding.tvCategoryName.text = categoriesList[position].strCategory
+
+        holder.itemView.setOnClickListener {
+            onMealsClick!!.invoke(categoriesList[position])
+        }
     }
 
 

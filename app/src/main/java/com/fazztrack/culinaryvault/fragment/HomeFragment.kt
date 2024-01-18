@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.fazztrack.culinaryvault.activity.CategoryMealsActivity
 import com.fazztrack.culinaryvault.activity.MealActivity
 import com.fazztrack.culinaryvault.adapter.CategoriesAdapter
 import com.fazztrack.culinaryvault.adapter.MostPopularAdapter
@@ -30,6 +31,7 @@ class HomeFragment : Fragment() {
         const val MEAL_ID = "com.fazztrack.culinaryvault.fragment.idMeal"
         const val MEAL_NAME = "com.fazztrack.culinaryvault.fragment.nameMeal"
         const val MEAL_THUMB = "com.fazztrack.culinaryvault.fragment.thumbMeal"
+        const val CATEGORY_NAME = "com.fazztrack.culinaryvault.fragment.categoryName"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,12 +59,20 @@ class HomeFragment : Fragment() {
         preparePopularFoodsRecyclerView()
         homeViewModel.getPopularFoods()
         observePopularFoodsLiveData()
-
         onPopularFoodClick()
 
         prepareCategoriesRecyclerView()
         homeViewModel.getCategories()
         observeCategoriesLiveData()
+        onCategoryClick()
+    }
+
+    private fun onCategoryClick() {
+        categoriesAdapter.onMealsClick = { category ->
+            val intent = Intent(activity, CategoryMealsActivity::class.java)
+            intent.putExtra(CATEGORY_NAME, category.strCategory)
+            startActivity(intent)
+        }
     }
 
     private fun prepareCategoriesRecyclerView() {
