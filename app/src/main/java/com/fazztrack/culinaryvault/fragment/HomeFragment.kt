@@ -8,9 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.fazztrack.culinaryvault.activity.MealActivity
+import com.fazztrack.culinaryvault.adapter.MostPopularAdapter
 import com.fazztrack.culinaryvault.databinding.FragmentHomeBinding
+import com.fazztrack.culinaryvault.pojo.CategoryMeals
 import com.fazztrack.culinaryvault.pojo.Meal
 import com.fazztrack.culinaryvault.viewmodel.HomeViewModel
 
@@ -18,6 +21,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var randomsMeal: Meal
+    private lateinit var popularFoodsAdapter: MostPopularAdapter
 
     companion object{
         const val MEAL_ID = "com.fazztrack.culinaryvault.fragment.idMeal"
@@ -28,6 +32,8 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+
+        popularFoodsAdapter = MostPopularAdapter()
     }
 
     override fun onCreateView(
@@ -44,6 +50,37 @@ class HomeFragment : Fragment() {
         homeViewModel.getRandomMeal()
         observerRandomMeal()
         onRandomMealClick()
+
+        homeViewModel.getPopularFoods()
+        observePopularFoodsLiveData()
+
+        preparePopularFoodsRecyclerView()
+
+        onPopularFoodClick()
+    }
+
+    private fun onPopularFoodClick() {
+        popularFoodsAdapter.onFoodClick = { meal ->
+            val intent = Intent(activity, MealActivity::class.java)
+            intent.putExtra(MEAL_ID, meal.idMeal)
+            intent.putExtra(MEAL_NAME, meal.strMeal)
+            intent.putExtra(MEAL_THUMB, meal.strMealThumb)
+            startActivity(intent)
+        }
+    }
+
+    private fun preparePopularFoodsRecyclerView() {
+        binding.rvPopularFoods.apply {
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+            adapter = popularFoodsAdapter
+        }
+    }
+
+    private fun observePopularFoodsLiveData() {
+        homeViewModel.observePopularFoodsLiveData().observe(viewLifecycleOwner
+        ) { mealsList ->
+            popularFoodsAdapter.setMeals(mealsList = mealsList as ArrayList<CategoryMeals>)
+        }
     }
 
 //    override fun onResume() {
