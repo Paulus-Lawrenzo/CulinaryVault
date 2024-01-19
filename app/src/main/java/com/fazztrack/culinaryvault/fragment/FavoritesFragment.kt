@@ -7,11 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.fazztrack.culinaryvault.R
 import com.fazztrack.culinaryvault.activity.MainActivity
 import com.fazztrack.culinaryvault.adapter.FavoritesMealsAdapter
 import com.fazztrack.culinaryvault.databinding.FragmentFavoritesBinding
 import com.fazztrack.culinaryvault.viewmodel.HomeViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class FavoritesFragment : Fragment() {
     private lateinit var binding: FragmentFavoritesBinding
@@ -35,9 +38,33 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        prepareRecyclerView()
         observeFavorites()
 
-        prepareRecyclerView()
+        val itemTouchHelper = object: ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ) = true
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                viewModel.deleteMeal(favoritesMealsAdapter.differ.currentList[position])
+
+                Snackbar.make(requireView(), "Favorites Meal Deleted", Snackbar.LENGTH_LONG).setAction(
+                    "Undo",
+                    View.OnClickListener {
+                        viewModel.insertMeal(favoritesMealsAdapter.differ.currentList[position])
+                    }
+                ).show()
+            }
+        }
+
+        ItemTouchHelper(itemTouchHelper).attachToRecyclerView(binding.rvFavorites)
     }
 
     private fun prepareRecyclerView() {
