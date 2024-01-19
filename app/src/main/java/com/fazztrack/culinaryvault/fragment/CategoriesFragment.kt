@@ -1,5 +1,6 @@
 package com.fazztrack.culinaryvault.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.fazztrack.culinaryvault.R
+import com.fazztrack.culinaryvault.activity.CategoryMealsActivity
 import com.fazztrack.culinaryvault.activity.MainActivity
 import com.fazztrack.culinaryvault.adapter.CategoriesAdapter
 import com.fazztrack.culinaryvault.databinding.FragmentCategoriesBinding
@@ -22,6 +24,7 @@ class CategoriesFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         viewModel = (activity as MainActivity).viewModel
+        categoriesAdapter = CategoriesAdapter()
     }
 
     override fun onCreateView(
@@ -36,8 +39,17 @@ class CategoriesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         prepareRecyclerView()
-
+        viewModel.getCategories()
         observeCategoriess()
+        onCategoryClick()
+    }
+
+    private fun onCategoryClick() {
+        categoriesAdapter.onMealsClick = { category ->
+            val intent = Intent(activity, CategoryMealsActivity::class.java)
+            intent.putExtra(HomeFragment.CATEGORY_NAME, category.strCategory)
+            startActivity(intent)
+        }
     }
 
     private fun observeCategoriess() {

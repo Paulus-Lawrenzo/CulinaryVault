@@ -8,8 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.fazztrack.culinaryvault.databinding.MealItemsBinding
 import com.fazztrack.culinaryvault.pojo.Meal
+import com.fazztrack.culinaryvault.pojo.MealsByCategory
 
 class FavoritesMealsAdapter: RecyclerView.Adapter<FavoritesMealsAdapter.FavoritesMealsViewHolder>() {
+    lateinit var onMealClick: ((Meal) -> Unit)
+
     inner class FavoritesMealsViewHolder(val binding: MealItemsBinding): RecyclerView.ViewHolder(binding.root)
 
     private val diffUtil = object: DiffUtil.ItemCallback<Meal>() {
@@ -43,6 +46,10 @@ class FavoritesMealsAdapter: RecyclerView.Adapter<FavoritesMealsAdapter.Favorite
             .into(holder.binding.ivMeal)
 
         holder.binding.tvMealName.text = meal.strMeal
+
+        holder.itemView.setOnClickListener {
+            onMealClick.invoke(meal)
+        }
     }
 
 

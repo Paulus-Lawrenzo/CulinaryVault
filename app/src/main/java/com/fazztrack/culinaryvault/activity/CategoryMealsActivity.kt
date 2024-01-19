@@ -1,5 +1,6 @@
 package com.fazztrack.culinaryvault.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
@@ -22,6 +23,7 @@ class CategoryMealsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         prepareRecyclerView()
+        onMealClick()
 
         categoryMealsViewModel = ViewModelProvider(this)[CategoryMealsViewModel::class.java]
         categoryMealsViewModel.getMealsByCategory(intent.getStringExtra(HomeFragment.CATEGORY_NAME)!!)
@@ -29,6 +31,16 @@ class CategoryMealsActivity : AppCompatActivity() {
             binding.tvCategoryCount.text = "Total Count : ${mealsList.size}"
             categoryMealsAdapter.setMealsList(mealsList)
         })
+    }
+
+    private fun onMealClick() {
+        categoryMealsAdapter.onMealClick = { meals ->
+            val intent = Intent(this, MealActivity::class.java)
+            intent.putExtra(HomeFragment.MEAL_ID, meals.idMeal)
+            intent.putExtra(HomeFragment.MEAL_NAME, meals.strMeal)
+            intent.putExtra(HomeFragment.MEAL_THUMB, meals.strMealThumb)
+            startActivity(intent)
+        }
     }
 
     private fun prepareRecyclerView() {

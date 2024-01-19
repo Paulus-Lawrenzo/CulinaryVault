@@ -10,6 +10,7 @@ import com.fazztrack.culinaryvault.pojo.MealList
 import com.fazztrack.culinaryvault.pojo.MealsByCategory
 
 class CategoryMealsAdapter: RecyclerView.Adapter<CategoryMealsAdapter.CategoryMealsViewHolder>() {
+    lateinit var onMealClick: ((MealsByCategory) -> Unit)
     private var mealsList = ArrayList<MealsByCategory>()
 
     fun setMealsList(mealsList: List<MealsByCategory>) {
@@ -37,6 +38,10 @@ class CategoryMealsAdapter: RecyclerView.Adapter<CategoryMealsAdapter.CategoryMe
             .into(holder.binding.ivMeal)
 
         holder.binding.tvMealName.text = mealsList[position].strMeal
+
+        holder.itemView.setOnClickListener {
+            onMealClick.invoke(mealsList[position])
+        }
     }
 
 
