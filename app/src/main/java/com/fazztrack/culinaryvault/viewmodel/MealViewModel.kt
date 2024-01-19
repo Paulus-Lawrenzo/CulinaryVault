@@ -4,14 +4,19 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.fazztrack.culinaryvault.db.MealDatabase
 import com.fazztrack.culinaryvault.pojo.Meal
 import com.fazztrack.culinaryvault.pojo.MealList
 import com.fazztrack.culinaryvault.retrofit.RetrofitInstance
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MealVideoModel: ViewModel() {
+class MealViewModel(
+    val mealDatabase: MealDatabase
+): ViewModel() {
     private var mealDetailsLiveData = MutableLiveData<Meal>()
 
     fun getMealDetail(id: String){
@@ -34,5 +39,17 @@ class MealVideoModel: ViewModel() {
 
     fun observerMealDeatilsLiveData(): LiveData<Meal>{
         return mealDetailsLiveData
+    }
+
+    fun insertMeal(meal: Meal) {
+        viewModelScope.launch {
+            mealDatabase.mealDao().upsert(meal)
+        }
+    }
+
+    fun deleteMeal(meal: Meal) {
+        viewModelScope.launch {
+            mealDatabase.mealDao().delete(meal)
+        }
     }
 }

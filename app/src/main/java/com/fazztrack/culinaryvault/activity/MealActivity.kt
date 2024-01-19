@@ -5,23 +5,25 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.fazztrack.culinaryvault.R
 import com.fazztrack.culinaryvault.databinding.ActivityMealBinding
+import com.fazztrack.culinaryvault.db.MealDatabase
 import com.fazztrack.culinaryvault.fragment.HomeFragment
 import com.fazztrack.culinaryvault.pojo.Meal
-import com.fazztrack.culinaryvault.viewmodel.HomeViewModel
-import com.fazztrack.culinaryvault.viewmodel.MealVideoModel
+import com.fazztrack.culinaryvault.viewmodel.MealViewModel
+import com.fazztrack.culinaryvault.viewmodel.MealViewModelFactory
 
 class MealActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMealBinding
     private lateinit var mealId: String
     private lateinit var mealName: String
     private lateinit var mealThumb: String
-    private lateinit var mealViewModel: MealVideoModel
+    private lateinit var mealViewModel: MealViewModel
     private lateinit var youtubeLink: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +31,9 @@ class MealActivity : AppCompatActivity() {
         binding = ActivityMealBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        mealViewModel = ViewModelProvider(this)[MealVideoModel::class.java]
+        val mealDatabase = MealDatabase.getInstance(this)
+        val viewModelFactory = MealViewModelFactory(mealDatabase)
+        mealViewModel = ViewModelProvider(this, viewModelFactory)[MealViewModel::class.java]
 
         getMealInfoFromIntent()
         setInformationInViews()
@@ -40,6 +44,17 @@ class MealActivity : AppCompatActivity() {
         observerMealDetailsLiveData()
 
         onYoutubeImageClick()
+
+        onFavoriteClick()
+    }
+
+    private fun onFavoriteClick() {
+        binding.btnFabAddFavorite.setOnClickListener {
+            mealToSave?.let {
+                mealViewModel.insertMeal(it)
+                Toast.makeText(this, "Meal Saved to Favorites", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun onYoutubeImageClick() {
@@ -49,12 +64,14 @@ class MealActivity : AppCompatActivity() {
         }
     }
 
+    private var mealToSave: Meal?= null
     private fun observerMealDetailsLiveData() {
         mealViewModel.observerMealDeatilsLiveData().observe(this, object : Observer<Meal>{
             override fun onChanged(value: Meal) {
                 onResponseCase()
 
                 val meal = value
+                mealToSave = meal
 
                 binding.tvCategoryOnDetail.text = "Category : ${meal!!.strCategory}"
                 binding.tvAreaOnDetail.text = "Area : ${meal.strArea}"
