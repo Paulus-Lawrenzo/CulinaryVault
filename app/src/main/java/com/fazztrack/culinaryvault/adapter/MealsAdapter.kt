@@ -8,9 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.fazztrack.culinaryvault.databinding.MealItemsBinding
 import com.fazztrack.culinaryvault.pojo.Meal
-import com.fazztrack.culinaryvault.pojo.MealsByCategory
 
-class FavoritesMealsAdapter: RecyclerView.Adapter<FavoritesMealsAdapter.FavoritesMealsViewHolder>() {
+class MealsAdapter: RecyclerView.Adapter<MealsAdapter.FavoritesMealsViewHolder>() {
     lateinit var onMealClick: ((Meal) -> Unit)
 
     inner class FavoritesMealsViewHolder(val binding: MealItemsBinding): RecyclerView.ViewHolder(binding.root)

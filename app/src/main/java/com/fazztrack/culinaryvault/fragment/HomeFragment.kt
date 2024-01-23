@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.fazztrack.culinaryvault.R
 import com.fazztrack.culinaryvault.activity.CategoryMealsActivity
 import com.fazztrack.culinaryvault.activity.MainActivity
 import com.fazztrack.culinaryvault.activity.MealActivity
@@ -66,6 +68,14 @@ class HomeFragment : Fragment() {
         viewModel.getCategories()
         observeCategoriesLiveData()
         onCategoryClick()
+
+        onSearchIconClick()
+    }
+
+    private fun onSearchIconClick() {
+        binding.ivSearch.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+        }
     }
 
     private fun onCategoryClick() {
@@ -134,7 +144,7 @@ class HomeFragment : Fragment() {
         ) { meal ->
             Glide
                 .with(this@HomeFragment)
-                .load(meal!!.strMealThumb)
+                .load(meal?.strMealThumb)
                 .into(binding.ivWhatToEat)
 
             this.randomsMeal = meal

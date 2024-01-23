@@ -94,9 +94,9 @@ class MealActivity : AppCompatActivity() {
 
     private fun getMealInfoFromIntent() {
         val intent = intent
-        mealId = intent.getStringExtra(HomeFragment.MEAL_ID)!!
-        mealName = intent.getStringExtra(HomeFragment.MEAL_NAME)!!
-        mealThumb = intent.getStringExtra(HomeFragment.MEAL_THUMB)!!
+        mealId = intent.getStringExtra(HomeFragment.MEAL_ID) ?: ""
+        mealName = intent.getStringExtra(HomeFragment.MEAL_NAME) ?: ""
+        mealThumb = intent.getStringExtra(HomeFragment.MEAL_THUMB) ?: ""
     }
 
     private fun loadingCase() {
