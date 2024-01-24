@@ -19,7 +19,23 @@ Culinary Vault is an user-friendly mobile application designed to simplify cooki
 
 ## Screenshots
 
+### Home
+![Home](https://github.com/Paulus-Lawrenzo/CulinaryVault/blob/master/screenshots/Home.png?raw=true)
 
+### Search
+![Search](https://github.com/Paulus-Lawrenzo/CulinaryVault/blob/master/screenshots/Search.png?raw=true)
+
+### Meal Details
+![Meal Details](https://github.com/Paulus-Lawrenzo/CulinaryVault/blob/master/screenshots/Meal%20Details.png?raw=true)
+
+### Category Meals
+![Category Meals](https://github.com/Paulus-Lawrenzo/CulinaryVault/blob/master/screenshots/Category%20Meals.png?raw=true)
+
+### Favorite Meals
+![Favorite Meals](https://github.com/Paulus-Lawrenzo/CulinaryVault/blob/master/screenshots/Favorite%20Meals.png?raw=true)
+
+### Meals by Category
+![Meals by Category](https://github.com/Paulus-Lawrenzo/CulinaryVault/blob/master/screenshots/Meals%20by%20Category.png?raw=true)
 
 ## Getting started
 
